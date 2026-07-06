@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+/*
+ * PAR5 design tokens — single source of truth (Tailwind v4 CSS-native config).
+ * See docs/architecture.md §7, §8, §9 for the values below.
+ */
+@theme {
+  /* ---- Color — near-monochrome, 90% neutral / 10% accent ---- */
+  --color-bg: #FAFAFA;
+  --color-surface: #FFFFFF;
+  --color-text-primary: #0A0A0A;
+  --color-text-secondary: #525252;
+  --color-text-muted: #A3A3A3;
+  --color-border: #E5E5E5;
+
+  /* Lime green, sampled directly from the PAR5 logo source files — confirmed final.
+   * Use sparingly: ~10% of any viewport max. Never a full-surface wash. Never blue. */
+  --color-accent: #8FFF00;
+
+  --color-inverse-bg: #0A0A0A;
+  --color-inverse-text: #FAFAFA;
+
+  /* ---- Fonts — self-hosted via next/font/local, wired in the root layout (Phase 1c) ----
+   * The -raw variables below are populated at runtime by next/font's `variable` option
+   * on <html>. Referencing them here (rather than hardcoding literal font-family strings)
+   * is what actually makes the custom fonts render — a literal 'Fraunces' string with no
+   * matching @font-face would silently fall back to the generic serif/sans/mono stack.
+   * Until Phase 1c wires up next/font, these fall back to the stacks below (harmless). */
+  --font-fraunces: var(--font-fraunces-raw), Georgia, 'Times New Roman', serif; /* headlines/section titles ONLY — never in buttons, labels, or body copy */
+  --font-inter: var(--font-inter-raw), -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; /* body copy, UI, nav, buttons, forms */
+  --font-mono: var(--font-mono-raw), 'SF Mono', Consolas, 'Liberation Mono', monospace; /* tiny inline data labels only — pricing figures, category tags. NOT section eyebrows/taglines — those read "developer/techy," working against the premium-consultancy positioning; use Inter for those. */
+
+  /* ---- Fluid type scale — clamp(min, yIntercept + slope*vw, max), interpolated 375px -> 1440px ----
+   * Values sourced from docs/architecture.md §8. Line-heights: body 1.6 (doc-specified),
+   * headings 1.15 (display/h1) scaling to 1.25 (h3) (doc-specified). caption/eyebrow
+   * line-height (1.4) is NOT doc-specified — a reasonable default, flag if wrong. */
+  --text-display: clamp(2.25rem, 1.8099rem + 0.1174vw, 3.5rem);
+  --text-display--line-height: 1.15;
+
+  --text-h1: clamp(1.875rem, 1.5669rem + 0.0822vw, 2.75rem);
+  --text-h1--line-height: 1.15;
+
+  --text-h2: clamp(1.5rem, 1.3239rem + 0.0469vw, 2rem);
+  --text-h2--line-height: 1.2;
+
+  --text-h3: clamp(1.25rem, 1.162rem + 0.0235vw, 1.5rem);
+  --text-h3--line-height: 1.25;
+
+  --text-body: clamp(1rem, 0.978rem + 0.0059vw, 1.0625rem);
+  --text-body--line-height: 1.6;
+
+  --text-body-lg: clamp(1.125rem, 1.081rem + 0.0117vw, 1.25rem);
+  --text-body-lg--line-height: 1.6;
+
+  /* caption is 0.875rem at both mobile and desktop — static, no clamp needed */
+  --text-caption: 0.875rem;
+  --text-caption--line-height: 1.4; /* not doc-specified, default */
+
+  --text-eyebrow: clamp(0.75rem, 0.728rem + 0.0059vw, 0.8125rem);
+  --text-eyebrow--line-height: 1.4; /* not doc-specified, default */
+
+  --tracking-display: -0.02em; /* heading letter-spacing per §8: "slightly tight (-0.02em on display)" */
+
+  /* ---- Container widths — generates max-w-narrow / max-w-default / max-w-wide ---- */
+  --container-narrow: 40rem;   /* 640px */
+  --container-default: 70rem;  /* 1120px */
+  --container-wide: 80rem;     /* 1280px */
+
+  /* Section vertical rhythm deliberately NOT tokenized here — §1 Section.tsx uses the
+   * breakpoint-based `py-16 md:py-24 lg:py-32`, which is already Tailwind's default
+   * spacing scale (4rem/6rem/8rem). No custom token needed; applied directly in Phase 1c. */
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-inter);
+}
+
+/*
+ * Homepage hero background grid — fast multi-depth drift (docs/architecture.md §6).
+ * Rows alternate direction within each layer (row 1 left, row 2 right, row 3 left...);
+ * animation-duration is set per-layer via inline style, direction/timing/looping via
+ * these classes, so the values below apply to every row regardless of its layer's speed.
+ * Reduced-motion: freeze to the static composed frame (transform removed entirely,
+ * not just the animation) rather than merely killing opacity, per §6's global rules.
+ * The !important is required because it must win over the inline animation-duration.
+ */
+@keyframes row-drift-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-140px); }
+}
+@keyframes row-drift-right {
+  from { transform: translateX(0); }
+  to { transform: translateX(140px); }
+}
+
+.row-drift-left {
+  animation-name: row-drift-left;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+.row-drift-right {
+  animation-name: row-drift-right;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row-drift-left,
+  .row-drift-right {
+    animation: none !important;
+  }
+}
+
+/*
+ * Homepage first-load intro transition — logo fade + slight scale in.
+ * The overlay's own show/hide is JS-driven (tied to real hero image load
+ * progress, capped at 2s — see LoadingTransition.tsx), but the logo's entrance
+ * animation itself is plain CSS so it's not reinvented in Tailwind arbitrary values.
+ */
+@keyframes intro-logo-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+.intro-logo-in {
+  animation: intro-logo-in 0.5s ease-out forwards;
+}
+
+/*
+ * Ambient background blobs (AmbientBlobs.tsx) — extremely slow, large-radius
+ * drift, felt rather than seen. Each blob gets its own translate destination;
+ * duration is set per-instance via inline style, same pattern as row-drift-*.
+ */
+@keyframes ambient-drift-1 { from { transform: translate(0, 0); } to { transform: translate(70px, -50px); } }
+@keyframes ambient-drift-2 { from { transform: translate(0, 0); } to { transform: translate(-60px, 40px); } }
+@keyframes ambient-drift-3 { from { transform: translate(0, 0); } to { transform: translate(40px, 60px); } }
+
+.ambient-drift-1 { animation-name: ambient-drift-1; animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-direction: alternate; }
+.ambient-drift-2 { animation-name: ambient-drift-2; animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-direction: alternate; }
+.ambient-drift-3 { animation-name: ambient-drift-3; animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-direction: alternate; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-drift-1,
+  .ambient-drift-2,
+  .ambient-drift-3 {
+    animation: none !important;
+  }
+}
+
+/*
+ * Primary button metallic fill — Tap In and every other primary CTA (Button.tsx
+ * "primary" variant only). Deliberately a dedicated class, not a --color-*
+ * token: every other accent use (links, focus rings, logo, active-state badges,
+ * BuildMySystemButton's "Added" state) stays the flat #8FFF00 and must not
+ * reference this class.
+ */
+.btn-metallic-accent {
+  background-image: linear-gradient(135deg, #5C7A00 0%, #8FFF00 45%, #E4FFAD 100%);
+}
+
+/*
+ * Digital Sales System offer block's gold border (LobbyGrid.tsx) — same
+ * deeper-tone -> bright -> highlight technique as .btn-metallic-accent, in the
+ * gold palette. Same "do not reuse elsewhere" rule as the flat accent colors.
+ * The headline text itself stays flat, not gradient — a gradient through
+ * italic serif letterforms at this size reads as messy, not premium.
+ */
+.border-metallic-gold {
+  background-image: linear-gradient(135deg, #7A5F14 0%, #C9A227 45%, #F2E2A8 100%);
+}
