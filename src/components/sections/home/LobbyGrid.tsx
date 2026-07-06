@@ -5,8 +5,6 @@ import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/layout/Section';
 import { cn } from '@/lib/cn';
 
-const GOLD = '#C9A227';
-
 const LOBBY_TILES = [
   {
     title: 'Solutions',
@@ -106,7 +104,7 @@ export function LobbyGrid() {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="min-w-0 rounded-2xl border-metallic-gold p-[1.5px]">
             <div className="flex h-full flex-col rounded-[14.5px] bg-inverse-bg p-6 lg:p-8">
-              <FlankedHeadline style={{ color: GOLD }}>The Digital Sales System</FlankedHeadline>
+              <FlankedHeadline className="text-gold">The Digital Sales System</FlankedHeadline>
               <p className="mt-2 text-body text-inverse-text/80">
                 Your complimentary blueprint for digital marketing success.
               </p>

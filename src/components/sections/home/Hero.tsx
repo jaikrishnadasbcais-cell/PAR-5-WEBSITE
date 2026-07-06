@@ -16,7 +16,7 @@ export function Hero() {
             Technology &amp; Growth Partner
           </p>
         </div>
-        <h1 className="mt-3 max-w-3xl font-[family-name:var(--font-fraunces)] text-display font-semibold tracking-[-0.02em] text-text-primary">
+        <h1 className="mt-3 max-w-3xl font-[family-name:var(--font-fraunces)] text-display font-semibold tracking-display text-text-primary">
           For the ones building something bigger.
         </h1>
         <HeroBackgroundGrid />

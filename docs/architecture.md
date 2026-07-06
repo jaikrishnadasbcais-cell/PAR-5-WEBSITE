@@ -11,7 +11,7 @@
 | CSS config | `tailwind.config.ts` + `globals.css` (Tailwind v3 style) | Single `@theme` block inside `src/styles/globals.css` (Tailwind v4) | `create-next-app` scaffolded v4, which is current stable and drops the JS config file entirely |
 | Typography | Inter/Geist only, no serif | **Fraunces** (headlines only) + **Inter** (body/UI) + **IBM Plex Mono** (tiny data labels only) | All-sans felt "hard tech"; serif headlines add warmth without sacrificing UI clarity |
 | Accent color | Placeholder blue (`#0066FF`), then placeholder `#A6FF00` | **`#8FFF00`** (lime green — exact hex sampled from the real PAR5 logo files, confirmed final) | Blue rejected outright — never use it |
-| Logo assets | Legacy "PAR5 MEDIA" source SVGs, "5" digit same color as rest of wordmark | **`PAR5_logo_black_green5.svg` / `PAR5_logo_white_green5.svg`** — "MEDIA" removed, "5" recolored to accent green | Company is "PAR5," not "PAR5 Media"; green "5" ties numeral to the flag icon — see §2.5 |
+| Logo assets | Legacy "PAR5 MEDIA" source SVGs, then the `_green5` pair | **`PAR5-logo.svg` / `PAR5-logo-white.svg`** (v3 amendment A3) — clean vector trace with animatable `#swoosh`, green "5" + green flag | Company is "PAR5," not "PAR5 Media"; green "5" ties numeral to the flag icon — see §2.5 |
 | Complimentary offer name | "Complimentary Digital Growth Blueprint" / "Business Growth Assessment" (earlier drafts) | **"Digital Sales System"** | Locked as final naming |
 | Mobile navigation | Full-screen overlay nav | **Bottom tab bar** — Home / Solutions / Insights / My System / Tap In, custom line icons, no emoji | Reads as native premium app; matches Porsche/Apple-configurator feel |
 | Pricing calculator | Guided 3-step flow (need → package → estimate) | **Replaced entirely by the "Build My System" configurator** — persistent floating panel + standalone review page | Feels like configuring a product, not filling in a form; bigger differentiator |
@@ -116,7 +116,7 @@ par5/
 ├── public/
 │   ├── fonts/                   # Self-hosted Fraunces + Inter + IBM Plex Mono variable fonts
 │   ├── images/
-│   │   ├── brand/                # PAR5_logo_black_green5.svg, PAR5_logo_white_green5.svg — see §2.5
+│   │   ├── brand/                # PAR5-logo.svg, PAR5-logo-white.svg — see §2.5
 │   │   ├── pages/
 │   │   └── showcase/
 │   ├── icons/                    # Custom line icons for bottom tab bar (no emoji)
@@ -242,7 +242,7 @@ The four outcome-language categories are **not** separate routes — they're the
 
 ## 2.5 Logo Assets (finalized)
 
-**Source of truth: `PAR5_logo_black_green5.svg` and `PAR5_logo_white_green5.svg`**, stored in `public/images/brand/`.
+**Source of truth (v3 amendment A3): `PAR5-logo.svg` (black, for light backgrounds) and `PAR5-logo-white.svg` (white, derived from it for dark backgrounds)**, stored in `public/images/brand/`. `PAR5-logo.svg` is the newer clean vector trace with the animatable `#swoosh` path; the white variant swaps only the black fills/strokes to white, keeping the green flag + green "5" and the identical viewBox/`#swoosh`. The former `_green5` pair and all PNGs are retired and deleted.
 
 **History:** original source files were legacy "PAR5 MEDIA" branding with a black/blue accent. Corrected in two edits:
 1. The "MEDIA" wordmark (a separate, distinctly-colored SVG group) was removed entirely — company is "PAR5," never "PAR5 Media."
@@ -255,8 +255,8 @@ The four outcome-language categories are **not** separate routes — they're the
 - The "5" digit is colored in the accent green (`#8FFF00`) — a deliberate detail tying the numeral to the flag icon; "P," "A," "R" remain in the primary text color (black or white depending on variant)
 
 **Two variants, use by background:**
-- `PAR5_logo_black_green5.svg` — black wordmark/flag-stick/swoosh, for use on light (`--color-bg`) backgrounds
-- `PAR5_logo_white_green5.svg` — white wordmark/flag-stick/swoosh, for use on dark (`--color-inverse-bg`) backgrounds or dark hero sections
+- `PAR5-logo.svg` — black wordmark/flag-stick/swoosh, for use on light (`--color-bg`) backgrounds
+- `PAR5-logo-white.svg` — white wordmark/flag-stick/swoosh, for use on dark (`--color-inverse-bg`) backgrounds or dark hero sections
 
 Both variants share the same green flag triangle and green "5" — only the primary text/line color swaps.
 
@@ -373,7 +373,9 @@ export const TAB_ROUTES = [
 - No infinite loops (except the intentional slow hero-grid drift and showcase filmstrip, both of which pause/freeze under reduced-motion)
 - No parallax on mobile beyond the hero background treatment
 - No scroll-jacking
-- Max 3 animated elements visible in a single viewport
+- Max 1 choreographed sequence per viewport (v3 amendment B2 — a stagger of 6 lobby cards is one sequence, not six elements; two competing sequences on screen at once are forbidden)
+- Scroll-linked effects must be scrubbed (v3 amendment B2 — tied to scroll position via Framer Motion `useScroll`/`useTransform`, reversible, always under the user's control; never time-based animations triggered by scroll that play *at* the user)
+- Text entrance budget 400ms (v3 amendment B2 — environment may take longer; words may not; motion happens to the environment, never to the words)
 
 ### Patterns
 | Pattern | Component | Usage |
@@ -522,7 +524,7 @@ NEXT_PUBLIC_BOOKING_EMBED_URL=
 - **1c** — Layout shell: root layout with font loading + `BuildMySystemProvider` mount, `SiteHeader`, `SiteFooter`, `MobileTabBar`, `PageShell`, `Section`, minimal `Button`/`LinkButton`/`Container`.
 
 ### Phase 2 — Homepage
-- Hero (blurred moving 3D grid background per visual spec), announcement bar (quiet, "Digital Sales System" offer), four preview cards → Solutions/Process/Showcase/Insights, single `CTABand` → Tap In. Sign off on hero specifically before proceeding.
+- Hero (moving 3D grid per visual spec), announcement bar, the **6-block lobby grid** (v3 amendment B3 — replaces the original "four preview cards": 2 featured offer blocks [Digital Sales System with gold nameplate + gold border, Free Demo Website with neutral white nameplate] + 4 equal-weight lobby cards → Solutions/Process/Showcase/Insights, all cells of one shared grid, single column below `md:`), single `CTABand` → Tap In. Sign off on hero specifically before proceeding.
 
 ### Phase 3 — Build My System
 - `BuildMySystemProvider` (Context + `useReducer`), `FloatingPanel`, `BuildMySystemButton`, standalone `/build-my-system` review page. Build and approve in isolation with 2–3 stub services before wiring into real solution pages.
