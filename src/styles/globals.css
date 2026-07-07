@@ -22,6 +22,10 @@
    * the lobby grid. Do not reach for this token anywhere else. */
   --color-gold: #C9A227;
 
+  /* FORM-VALIDATION ONLY (owner-approved): inline field error messages.
+   * Never decorative, never a general danger/destructive color. */
+  --color-error: #B42318;
+
   --color-inverse-bg: #0A0A0A;
   --color-inverse-text: #FAFAFA;
 

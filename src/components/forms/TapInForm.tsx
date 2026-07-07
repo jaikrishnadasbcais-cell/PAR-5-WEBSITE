@@ -49,7 +49,7 @@ function Field({
       </label>
       <div className="mt-1.5">{children}</div>
       {errors?.[0] && (
-        <p id={`${htmlFor}-error`} aria-live="polite" className="mt-1.5 text-caption font-medium text-text-primary">
+        <p id={`${htmlFor}-error`} aria-live="polite" className="mt-1.5 text-caption font-medium text-error">
           {errors[0]}
         </p>
       )}
