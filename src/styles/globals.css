@@ -142,6 +142,27 @@ body {
 }
 
 /*
+ * Intro swoosh line-draw (v3 amendment C1.4) — the #swoosh path the logo was
+ * built for. 1400 comfortably exceeds the path's ~1272-unit length. The
+ * LoadingTransition never mounts under prefers-reduced-motion, but the
+ * override below also covers any other AnimatedLogo placement.
+ */
+.intro-swoosh {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: swoosh-draw 0.5s ease-out 0.15s forwards;
+}
+@keyframes swoosh-draw {
+  to { stroke-dashoffset: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-swoosh {
+    animation: none !important;
+    stroke-dashoffset: 0;
+  }
+}
+
+/*
  * Ambient background blobs (AmbientBlobs.tsx) — extremely slow, large-radius
  * drift, felt rather than seen. Each blob gets its own translate destination;
  * duration is set per-instance via inline style, same pattern as row-drift-*.

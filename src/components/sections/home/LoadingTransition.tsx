@@ -1,11 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
+import { AnimatedLogo } from '@/components/brand/AnimatedLogo';
 import { DESIGN_TILES } from '@/lib/designTiles';
 
 const SESSION_KEY = 'par5-intro-played';
-const MAX_DURATION_MS = 2000;
+// Hard bridge cap for slow image loads. The choreographed part (logo entrance
+// + swoosh draw + exit fade) fits the v3 C1.4 sub-1.6s budget; this cap only
+// delays the reveal when the hero tiles genuinely aren't loaded yet.
+const MAX_DURATION_MS = 1500;
 
 // Homepage-only, once per session (sessionStorage). Reveal is tied to real hero
 // image load progress — fast connections dismiss promptly, slow ones are bridged
@@ -46,7 +49,7 @@ export function LoadingTransition() {
     const entranceTimer = setTimeout(() => {
       entranceReady = true;
       maybeFinish();
-    }, 500); // matches .intro-logo-in's animation-duration
+    }, 700); // .intro-logo-in (0.5s) + the swoosh draw finishing (0.15s delay + 0.5s)
 
     const onProgress = () => {
       loadedCount += 1;
@@ -73,7 +76,7 @@ export function LoadingTransition() {
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex items-center justify-center bg-bg transition-opacity duration-500 ${
+      className={`fixed inset-0 z-[100] flex items-center justify-center bg-bg transition-opacity duration-300 ${
         isExiting ? 'pointer-events-none opacity-0' : 'opacity-100'
       }`}
       onTransitionEnd={() => {
@@ -81,14 +84,7 @@ export function LoadingTransition() {
       }}
       aria-hidden="true"
     >
-      <Image
-        src="/images/brand/PAR5-logo.svg"
-        alt=""
-        width={1634}
-        height={791}
-        priority
-        className="intro-logo-in h-12 w-auto"
-      />
+      <AnimatedLogo className="intro-logo-in h-12 w-auto" />
     </div>
   );
 }

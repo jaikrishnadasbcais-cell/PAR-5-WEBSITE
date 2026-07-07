@@ -117,7 +117,7 @@ export function LobbyGrid() {
             <p className="mt-2 text-body text-inverse-text/80">
               See what your business could look like online — no cost, no commitment.
             </p>
-            <OfferCTA href={ROUTES.tapIn} label="Claim Your Demo" />
+            <OfferCTA href={`${ROUTES.tapIn}?interest=demo-website`} label="Claim Your Demo" />
           </div>
 
           {LOBBY_TILES.map((tile) => (
