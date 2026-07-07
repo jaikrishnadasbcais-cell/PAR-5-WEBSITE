@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/Card';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/layout/Section';
 import { AmbientBlobs } from '@/components/sections/home/AmbientBlobs';
+import { StaggerGroup, StaggerItem } from '@/components/motion/Stagger';
 import { ROUTES } from '@/lib/routes';
 
 export const metadata: Metadata = {
@@ -53,16 +54,18 @@ export default function SolutionsPage() {
           matches where the business needs help most.
         </p>
 
-        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <StaggerGroup className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2">
           {GOAL_TILES.map((tile) => (
-            <Link key={tile.title} href={tile.href} className="block">
-              <Card className="h-full">
-                <h2 className="font-[family-name:var(--font-fraunces)] text-h3">{tile.title}</h2>
-                <p className="mt-3 text-body text-text-secondary">{tile.description}</p>
-              </Card>
-            </Link>
+            <StaggerItem key={tile.title} className="min-w-0">
+              <Link href={tile.href} className="block h-full">
+                <Card className="h-full">
+                  <h2 className="font-[family-name:var(--font-fraunces)] text-h3">{tile.title}</h2>
+                  <p className="mt-3 text-body text-text-secondary">{tile.description}</p>
+                </Card>
+              </Link>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGroup>
       </Container>
     </Section>
   );
