@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { submitTapIn } from '@/app/(site)/tap-in/actions';
 import { Button } from '@/components/ui/Button';
 import { LinkButton } from '@/components/ui/LinkButton';
+import { useBuildMySystem } from '@/components/features/build-my-system';
 import {
   TAP_IN_INITIAL_STATE,
   type FormType,
@@ -12,6 +13,7 @@ import {
   type TapInFieldErrors,
 } from '@/lib/forms/types';
 import { whatsappLink } from '@/lib/whatsapp';
+import { formatRand } from '@/lib/currency';
 import { ROUTES } from '@/lib/routes';
 
 const INTEREST_LABELS: Record<ServiceInterest, string> = {
@@ -60,13 +62,23 @@ function Field({
 export function TapInForm({
   formType,
   serviceInterest,
-  buildSelections,
 }: {
   formType: FormType;
   serviceInterest?: ServiceInterest;
-  buildSelections?: string;
 }) {
   const [state, formAction, pending] = useActionState(submitTapIn, TAP_IN_INITIAL_STATE);
+
+  // C5.4 — when the visitor arrived from Build My System, the lead carries
+  // the exact system they configured. The provider is mounted in the root
+  // layout, so the same client context the floating panel uses is readable
+  // right here — no extra state plumbing.
+  const { selectedServices, totals } = useBuildMySystem();
+  const buildSelections =
+    formType === 'build-my-system' && selectedServices.length > 0
+      ? `${selectedServices.map((s) => s.name).join('; ')} | est. build ${formatRand(
+          totals.implementationMin
+        )}+, monthly ${formatRand(totals.monthlyMin)}+/mo`
+      : undefined;
 
   // "Pathname the user came from" — same-origin referrer when there is one,
   // otherwise the page itself. Set in an effect so server/client HTML match.

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { LinkButton } from '@/components/ui/LinkButton';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/layout/Section';
@@ -7,6 +8,7 @@ import { ROUTES } from '@/lib/routes';
 import { useBuildMySystem } from './useBuildMySystem';
 import { SelectionListItem } from './SelectionListItem';
 import { formatRand } from '@/lib/currency';
+import { whatsappLink } from '@/lib/whatsapp';
 
 export function BuildMySystemReview() {
   const { selectedServices, totals } = useBuildMySystem();
@@ -27,6 +29,17 @@ export function BuildMySystemReview() {
               Browse Solutions
             </LinkButton>
           </div>
+          {/* Don't strand people who skipped the configurator (C5.4.3). */}
+          <p className="mt-4 text-body text-text-secondary">
+            or just{' '}
+            <Link
+              href={ROUTES.tapIn}
+              className="underline underline-offset-4 hover:text-text-primary"
+            >
+              Tap In
+            </Link>{' '}
+            and tell us what you need
+          </p>
         </Container>
       </Section>
     );
@@ -68,13 +81,22 @@ export function BuildMySystemReview() {
           </div>
         </div>
 
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           {/* Deliberately different label from the site-wide "Tap In" CTA — someone who's
               just built a system and reached this page has already committed to something
-              concrete, so the closing action reflects that rather than repeating the
-              generic entry-point invitation. Same destination. */}
-          <LinkButton href={ROUTES.tapIn} size="md">
+              concrete, so the closing action reflects that. ?interest=build makes the
+              tap-in form attach the configured selections to the lead (C5.4). */}
+          <LinkButton href={`${ROUTES.tapIn}?interest=build`} size="md">
             Book Complimentary Consultation
+          </LinkButton>
+          <LinkButton
+            href={whatsappLink('build-my-system')}
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="secondary"
+            size="md"
+          >
+            Talk it through on WhatsApp
           </LinkButton>
         </div>
       </Container>
