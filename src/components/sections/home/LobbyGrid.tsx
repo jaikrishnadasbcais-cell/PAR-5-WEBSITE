@@ -3,6 +3,7 @@ import { ROUTES } from '@/lib/routes';
 import { Card } from '@/components/ui/Card';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/layout/Section';
+import { StaggerGroup, StaggerItem } from '@/components/motion/Stagger';
 import { cn } from '@/lib/cn';
 
 const LOBBY_TILES = [
@@ -101,34 +102,42 @@ export function LobbyGrid() {
   return (
     <Section background="bg" className="pt-8 md:pt-12 lg:pt-16">
       <Container>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div className="min-w-0 rounded-2xl border-metallic-gold p-[1.5px]">
-            <div className="flex h-full flex-col rounded-[14.5px] bg-inverse-bg p-6 lg:p-8">
-              <FlankedHeadline className="text-gold">The Digital Sales System</FlankedHeadline>
-              <p className="mt-2 text-body text-inverse-text/80">
-                Your complimentary blueprint for digital marketing success.
-              </p>
-              <OfferCTA href={ROUTES.whatsIncluded} label="See What's Included" />
+        <StaggerGroup className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <StaggerItem className="min-w-0">
+            <div className="gold-sheen h-full rounded-2xl border-metallic-gold p-[1.5px]">
+              <div className="flex h-full flex-col rounded-[14.5px] bg-inverse-bg p-6 lg:p-8">
+                <FlankedHeadline className="gold-sheen-text text-gold">
+                  The Digital Sales System
+                </FlankedHeadline>
+                <p className="mt-2 text-body text-inverse-text/80">
+                  Your complimentary blueprint for digital marketing success.
+                </p>
+                <OfferCTA href={ROUTES.whatsIncluded} label="See What's Included" />
+              </div>
             </div>
-          </div>
+          </StaggerItem>
 
-          <div className="flex min-w-0 flex-col rounded-2xl border border-white/20 bg-inverse-bg p-6 lg:p-8">
-            <FlankedHeadline className="text-inverse-text">Get a Free Demo Website</FlankedHeadline>
-            <p className="mt-2 text-body text-inverse-text/80">
-              See what your business could look like online — no cost, no commitment.
-            </p>
-            <OfferCTA href={`${ROUTES.tapIn}?interest=demo-website`} label="Claim Your Demo" />
-          </div>
+          <StaggerItem className="min-w-0">
+            <div className="flex h-full flex-col rounded-2xl border border-white/20 bg-inverse-bg p-6 lg:p-8">
+              <FlankedHeadline className="text-inverse-text">Get a Free Demo Website</FlankedHeadline>
+              <p className="mt-2 text-body text-inverse-text/80">
+                See what your business could look like online — no cost, no commitment.
+              </p>
+              <OfferCTA href={`${ROUTES.tapIn}?interest=demo-website`} label="Claim Your Demo" />
+            </div>
+          </StaggerItem>
 
           {LOBBY_TILES.map((tile) => (
-            <Link key={tile.href} href={tile.href} className="block min-w-0">
-              <Card className="h-full">
-                <h3 className="font-[family-name:var(--font-fraunces)] text-h3">{tile.title}</h3>
-                <p className="mt-3 text-body text-text-secondary">{tile.description}</p>
-              </Card>
-            </Link>
+            <StaggerItem key={tile.href} className="min-w-0">
+              <Link href={tile.href} className="block h-full">
+                <Card className="h-full">
+                  <h3 className="font-[family-name:var(--font-fraunces)] text-h3">{tile.title}</h3>
+                  <p className="mt-3 text-body text-text-secondary">{tile.description}</p>
+                </Card>
+              </Link>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGroup>
       </Container>
     </Section>
   );

@@ -204,3 +204,53 @@ body {
 .border-metallic-gold {
   background-image: linear-gradient(135deg, #7A5F14 0%, #C9A227 45%, #F2E2A8 100%);
 }
+
+/*
+ * Digital Sales System foil sheen (v3 amendment C2) — the single richest
+ * micro-interaction on the site; nothing else gets it. On hover/focus a
+ * specular band passes once (~1.2s) across the gold border ring and the
+ * nameplate — light catching foil stamping, not a glow. The ::before band
+ * sits above the wrapper's gold gradient but below the opaque inner card
+ * (isolation + negative z-index), so only the 1.5px ring ever shows it.
+ */
+.gold-sheen {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.gold-sheen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 42%, rgba(242, 226, 168, 0.9) 50%, transparent 58%);
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+.gold-sheen:hover::before,
+.gold-sheen:focus-within::before {
+  animation: sheen-pass 1.2s ease forwards;
+}
+@keyframes sheen-pass {
+  to { transform: translateX(130%); }
+}
+.gold-sheen:hover .gold-sheen-text,
+.gold-sheen:focus-within .gold-sheen-text {
+  background-image: linear-gradient(105deg, #c9a227 40%, #f2e2a8 50%, #c9a227 60%);
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: text-sheen 1.2s ease forwards;
+}
+@keyframes text-sheen {
+  from { background-position: 100% 0; }
+  to { background-position: 0% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gold-sheen::before,
+  .gold-sheen-text {
+    animation: none !important;
+  }
+}
