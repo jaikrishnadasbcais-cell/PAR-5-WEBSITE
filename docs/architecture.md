@@ -524,7 +524,7 @@ NEXT_PUBLIC_BOOKING_EMBED_URL=
 - **1c** — Layout shell: root layout with font loading + `BuildMySystemProvider` mount, `SiteHeader`, `SiteFooter`, `MobileTabBar`, `PageShell`, `Section`, minimal `Button`/`LinkButton`/`Container`.
 
 ### Phase 2 — Homepage
-- Hero (moving 3D grid per visual spec), announcement bar, the **6-block lobby grid** (v3 amendment B3 — replaces the original "four preview cards": 2 featured offer blocks [Digital Sales System with gold nameplate + gold border, Free Demo Website with neutral white nameplate] + 4 equal-weight lobby cards → Solutions/Process/Showcase/Insights, all cells of one shared grid, single column below `md:`), single `CTABand` → Tap In. Sign off on hero specifically before proceeding.
+- Hero (moving 3D grid per visual spec), announcement bar, the **6-block lobby grid** (v3 amendment B3, restyled by v3.1 — replaces the original "four preview cards": 2 featured offer blocks, both gold-nameplated and differentiated by surface [Digital Sales System dark with gold border, Free Demo Website light with `--color-gold-on-light` nameplate] + 4 equal-weight lobby cards → Solutions/Process/Showcase/Insights, each with a linear icon, float shadow, and press state, all cells of one shared **2-column grid at every breakpoint** per v3.1 D1), single `CTABand` → Tap In. Sign off on hero specifically before proceeding.
 
 ### Phase 3 — Build My System
 - `BuildMySystemProvider` (Context + `useReducer`), `FloatingPanel`, `BuildMySystemButton`, standalone `/build-my-system` review page. Build and approve in isolation with 2–3 stub services before wiring into real solution pages.

@@ -17,10 +17,16 @@
    * Use sparingly: ~10% of any viewport max. Never a full-surface wash. Never blue. */
   --color-accent: #8FFF00;
 
-  /* OFFER-SCOPED, never a second general accent (v3 amendment B3/A6): gold
-   * marks the Digital Sales System offer only — its nameplate and border in
-   * the lobby grid. Do not reach for this token anywhere else. */
+  /* OFFER-SCOPED, never a second general accent (v3.1 amendment D4): gold
+   * marks the two lobby offer-block nameplates/accents only — the Digital
+   * Sales System (dark surface) and the Free Demo Website (light surface).
+   * Never the CTA color (green owns actions), never anywhere else.
+   * gold-on-light is the darkened variant for light surfaces — #C9A227 on
+   * white sits near 2.1:1 contrast and washes out; #A6841F holds ~3.3:1,
+   * passing the 3:1 large-text threshold for the nameplate sizes it's used
+   * at. Use it ONLY on light surfaces, and only where plain gold would. */
   --color-gold: #C9A227;
+  --color-gold-on-light: #A6841F;
 
   /* FORM-VALIDATION ONLY (owner-approved): inline field error messages.
    * Never decorative, never a general danger/destructive color. */
