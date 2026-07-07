@@ -7,6 +7,7 @@ import { NAV_ROUTES, ROUTES } from '@/lib/routes';
 import { cn } from '@/lib/cn';
 import { Container } from '@/components/ui/Container';
 import { LinkButton } from '@/components/ui/LinkButton';
+import { TapInLabel } from '@/components/ui/TapInLabel';
 
 // Solid dark bar on every page (not conditional on scroll) — the white/green
 // logo variant needs a dark background to read against, so the header is
@@ -48,8 +49,8 @@ export function SiteHeader() {
             })}
           </nav>
 
-          <LinkButton href={ROUTES.tapIn} size="sm" className="hidden md:inline-flex">
-            Tap In
+          <LinkButton href={ROUTES.tapIn} size="sm" className="group hidden md:inline-flex">
+            <TapInLabel />
           </LinkButton>
         </div>
       </Container>

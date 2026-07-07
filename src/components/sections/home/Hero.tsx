@@ -11,6 +11,7 @@ import {
 } from 'framer-motion';
 import { LinkButton } from '@/components/ui/LinkButton';
 import { Container } from '@/components/ui/Container';
+import { TapInLabel } from '@/components/ui/TapInLabel';
 import { ROUTES } from '@/lib/routes';
 import { HeroBackgroundGrid } from './HeroBackgroundGrid';
 
@@ -95,8 +96,8 @@ export function Hero() {
               <LinkButton href={`${ROUTES.tapIn}?interest=demo-website`} size="md">
                 Get Your Free Demo Website
               </LinkButton>
-              <LinkButton href={ROUTES.tapIn} variant="secondary" size="md">
-                Tap In
+              <LinkButton href={ROUTES.tapIn} variant="secondary" size="md" className="group">
+                <TapInLabel />
               </LinkButton>
             </div>
           </motion.div>

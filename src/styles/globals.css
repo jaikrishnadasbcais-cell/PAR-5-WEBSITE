@@ -254,3 +254,46 @@ body {
     animation: none !important;
   }
 }
+
+/*
+ * The approved golf detail (v3 amendment C4) — TapInLabel.tsx, nav + hero
+ * Tap In CTAs only. The ball rolls in along the text baseline
+ * (translateY ≈ baseline relative to its resting spot above the "I") and
+ * hops up to settle as the dot. currentColor, so it reads as ink on the
+ * metallic nav button and on the outline hero button alike.
+ */
+.tapin-i {
+  position: relative;
+  display: inline-block;
+}
+.tapin-ball {
+  position: absolute;
+  top: -0.34em;
+  left: 50%;
+  width: 0.14em;
+  height: 0.14em;
+  margin-left: -0.07em;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0;
+  transform: translate(-2.4em, 1.05em);
+  pointer-events: none;
+}
+.group:hover .tapin-ball,
+.group:focus-visible .tapin-ball {
+  animation: tapin-ball-roll 0.55s cubic-bezier(0.3, 0.9, 0.4, 1.1) forwards;
+}
+@keyframes tapin-ball-roll {
+  0% { opacity: 0; transform: translate(-2.4em, 1.05em); }
+  20% { opacity: 1; }
+  72% { transform: translate(-0.18em, 1.05em); }
+  100% { opacity: 1; transform: translate(0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .tapin-ball,
+  .group:focus-visible .tapin-ball {
+    animation: none !important;
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
