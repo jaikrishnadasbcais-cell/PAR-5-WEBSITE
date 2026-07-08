@@ -28,6 +28,25 @@
   --color-gold: #C9A227;
   --color-gold-on-light: #A6841F;
 
+  /* LOBBY-GRID MATERIAL TIER, not a second accent (v3.3 amendment E3/E7):
+   * the "moss" scale is the dark molten surface for the two dark lobby cards
+   * (Solutions/Insights) plus their per-surface text tints. The ≤10% accent
+   * budget applies to bright #8FFF00 specifically (arrows, CTAs, focus,
+   * sheen highlights) — these are surface colors and sit outside it. Scoped
+   * to the lobby grid; no other page adopts the molten surface without a
+   * new amendment.
+   * 900/700/500 — gradient stops (deep forest -> green; 500 is the ceiling
+   * and only ever appears past the 100% stop, never fully on the surface).
+   * 600 — deep-green interactive marks on LIGHT cards, where bright #8FFF00
+   * fails contrast (established v3.1). 300 — index/mono label tint on dark.
+   * 100 — body tint on dark (~6.5:1 vs the #2A4D0C mid-gradient, AA-clear). */
+  --color-moss-900: #0F1D04;
+  --color-moss-700: #2A4D0C;
+  --color-moss-600: #3B6D11;
+  --color-moss-500: #4E9414;
+  --color-moss-300: #97C459;
+  --color-moss-100: #C0DD97;
+
   /* FORM-VALIDATION ONLY (owner-approved): inline field error messages.
    * Never decorative, never a general danger/destructive color. */
   --color-error: #B42318;
@@ -209,6 +228,21 @@ body {
  */
 .border-metallic-gold {
   background-image: linear-gradient(135deg, #7A5F14 0%, #C9A227 45%, #F2E2A8 100%);
+}
+
+/*
+ * Dark molten lobby-card surfaces (v3.3 amendment E3) — LobbyGrid.tsx only.
+ * The 130% end-stop is deliberate: the brightest stop (--color-moss-500)
+ * never fully arrives on the resting surface, so nothing brighter than
+ * ~#4E9414 ever shows. The two cards mirror their angle (Solutions 135°,
+ * Insights 315°) so the light source reads consistent across the
+ * checkerboard diagonal rather than copy-pasted.
+ */
+.molten-surface-135 {
+  background-image: linear-gradient(135deg, var(--color-moss-900) 0%, var(--color-moss-700) 60%, var(--color-moss-500) 130%);
+}
+.molten-surface-315 {
+  background-image: linear-gradient(315deg, var(--color-moss-900) 0%, var(--color-moss-700) 60%, var(--color-moss-500) 130%);
 }
 
 /*

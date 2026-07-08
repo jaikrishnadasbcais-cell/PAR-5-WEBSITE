@@ -447,6 +447,8 @@ Near-monochrome with one accent — **90% neutral, 10% accent.**
 | `--color-inverse-bg` | `#0A0A0A` | Inverse sections (sparingly) |
 | `--color-inverse-text` | `#FAFAFA` | Text on inverse |
 
+**Molten material tier (v3.3 amendment E7):** the lobby grid's two dark cards use the `--color-moss-*` scale — `moss-900/700/500` as the molten gradient stops, `moss-300/100` as text tints on the dark surface, and `moss-600` as the deep-green interactive mark on light cards (where bright `#8FFF00` fails contrast). These are **surface/material colors, not a second accent**: the ≤10% accent budget applies to bright `#8FFF00` specifically (arrows, CTAs, focus rings, sheen highlights). The molten surface is scoped to the lobby grid; no other page adopts it without a new amendment.
+
 ### Design token architecture (Tailwind v4 — single source of truth)
 
 Tailwind v4 uses **CSS-native configuration.** There is no `tailwind.config.ts`. All tokens live directly in `src/styles/globals.css`:
