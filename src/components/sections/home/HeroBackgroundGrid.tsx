@@ -22,6 +22,7 @@ type TileLayerConfig = {
   rowDurationSeconds: number;
   // How far this layer translates (px) over the full hero scroll — nearer
   // layers move further, which is what sells the depth on scroll (C1.6).
+  // v3.3 follow-up: all three distances +20% (were 50/110/180).
   scrubDistance: number;
 };
 
@@ -43,7 +44,7 @@ const LAYERS: TileLayerConfig[] = [
     widthPercent: 240,
     imageOffset: 0,
     rowDurationSeconds: 16,
-    scrubDistance: 50,
+    scrubDistance: 60,
   },
   {
     key: 'mid',
@@ -56,7 +57,7 @@ const LAYERS: TileLayerConfig[] = [
     widthPercent: 225,
     imageOffset: 5,
     rowDurationSeconds: 12,
-    scrubDistance: 110,
+    scrubDistance: 132,
   },
   {
     key: 'near',
@@ -69,7 +70,7 @@ const LAYERS: TileLayerConfig[] = [
     widthPercent: 210,
     imageOffset: 11,
     rowDurationSeconds: 9,
-    scrubDistance: 180,
+    scrubDistance: 216,
   },
 ];
 
@@ -161,7 +162,10 @@ export function HeroBackgroundGrid({
   rotateY: MotionValue<number>;
 }) {
   const reduced = useReducedMotion() ?? false;
-  const gridOpacity = useTransform(scrollProgress, [0, 0.85], [1, 0]);
+  // v3.3 follow-up: fade completes by 0.7 of the hero scroll (was 0.85) —
+  // ~20% steeper opacity delta per scroll increment, still fully scrubbed
+  // and reversible.
+  const gridOpacity = useTransform(scrollProgress, [0, 0.7], [1, 0]);
 
   return (
     <motion.div

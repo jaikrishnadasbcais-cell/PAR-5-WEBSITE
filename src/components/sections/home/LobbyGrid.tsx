@@ -160,23 +160,6 @@ function ArrowIcon({ className }: { className?: string }) {
   );
 }
 
-// Green text link — dark surfaces only (#8FFF00 letterforms need the dark
-// ground to be legible). The light demo block uses the outline-button
-// pattern instead — see its LinkButton below.
-function OfferCTA({ href, label }: { href: string; label: string }) {
-  return (
-    <Link
-      href={href}
-      className="group mt-auto inline-flex w-fit items-center gap-1.5 pt-4 text-caption font-medium text-accent md:text-body"
-    >
-      <span className="bg-gradient-to-r from-accent to-accent bg-[length:0%_1px] bg-left-bottom bg-no-repeat pb-0.5 transition-[background-size] duration-300 ease-out group-hover:bg-[length:100%_1px]">
-        {label}
-      </span>
-      <ArrowIcon className="h-4 w-4 shrink-0 transition-transform duration-300 ease-out group-hover:translate-x-1" />
-    </Link>
-  );
-}
-
 // Editorial-masthead flourish: thin flanking dashes either side of the offer
 // name, non-italic against the italic headline so they read as a quiet rule
 // rather than part of the name. Plain inline text (not flex) so the whole
@@ -272,7 +255,22 @@ export function LobbyGrid() {
                   <p className="mt-2 text-caption text-inverse-text/80 md:text-body">
                     Your complimentary sales blueprint.
                   </p>
-                  <OfferCTA href={ROUTES.whatsIncluded} label="See What's Included" />
+                  {/* Same bordered-pill treatment as the demo block's CTA
+                      (shape, padding, weight), recolored for the DSS surface:
+                      gold border + arrow, light label. hover:bg-surface would
+                      flash white under the light label, so it becomes a quiet
+                      gold tint here. */}
+                  <div className="mt-auto pt-4">
+                    <LinkButton
+                      href={ROUTES.whatsIncluded}
+                      variant="secondary"
+                      size="sm"
+                      className="h-auto min-h-10 w-fit gap-1.5 whitespace-normal border-gold text-inverse-text px-3.5 py-2 text-center hover:bg-gold/10 md:px-5"
+                    >
+                      See What's Included
+                      <ArrowIcon className="h-4 w-4 shrink-0 text-gold" />
+                    </LinkButton>
+                  </div>
                 </div>
               </div>
             </JellyPress>

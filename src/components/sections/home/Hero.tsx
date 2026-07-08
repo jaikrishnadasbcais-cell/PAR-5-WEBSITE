@@ -33,13 +33,15 @@ export function Hero() {
     offset: ['start start', 'end start'],
   });
 
-  // C1.5 — spring-damped cursor parallax (±2.5°), desktop pointers only.
+  // C1.5 — spring-damped cursor parallax (±3°), desktop pointers only.
+  // v3.3 follow-up: +20% intensity (was ±2.5°) and slightly less damping
+  // (was 14) — a touch more fluid, a slightly longer settle, not snappier.
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
-  const springX = useSpring(pointerX, { stiffness: 50, damping: 14 });
-  const springY = useSpring(pointerY, { stiffness: 50, damping: 14 });
-  const rotateY = useTransform(springX, [-1, 1], [-2.5, 2.5]);
-  const rotateX = useTransform(springY, [-1, 1], [2.5, -2.5]);
+  const springX = useSpring(pointerX, { stiffness: 50, damping: 12 });
+  const springY = useSpring(pointerY, { stiffness: 50, damping: 12 });
+  const rotateY = useTransform(springX, [-1, 1], [-3, 3]);
+  const rotateX = useTransform(springY, [-1, 1], [3, -3]);
 
   const onPointerMove = (event: React.PointerEvent<HTMLElement>) => {
     if (reduced || event.pointerType !== 'mouse' || !sectionRef.current) return;
