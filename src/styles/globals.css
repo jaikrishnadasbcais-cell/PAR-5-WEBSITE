@@ -296,6 +296,34 @@ body {
 }
 
 /*
+ * Footer specks (v3.2 F4) — dust motes on the dark close, not a particle
+ * showpiece. Very slow alternate drift (20–40s per traversal, set inline per
+ * speck with negative delays for phase variance); play-state gated by the
+ * .specks-live visibility class (IntersectionObserver) so they cost nothing
+ * off-screen. No twinkle, no glow, no blur — rejected effect classes.
+ */
+.speck {
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-play-state: paused;
+}
+.specks-live .speck {
+  animation-play-state: running;
+}
+@keyframes speck-drift-1 { from { transform: translate(0, 0); } to { transform: translate(34px, -22px); } }
+@keyframes speck-drift-2 { from { transform: translate(0, 0); } to { transform: translate(-28px, 18px); } }
+@keyframes speck-drift-3 { from { transform: translate(0, 0); } to { transform: translate(18px, 30px); } }
+.speck-drift-1 { animation-name: speck-drift-1; }
+.speck-drift-2 { animation-name: speck-drift-2; }
+.speck-drift-3 { animation-name: speck-drift-3; }
+@media (prefers-reduced-motion: reduce) {
+  .speck {
+    animation: none !important;
+  }
+}
+
+/*
  * The approved golf detail (v3 amendment C4) — TapInLabel.tsx, nav + hero
  * Tap In CTAs only. The ball rolls in along the text baseline
  * (translateY ≈ baseline relative to its resting spot above the "I") and
