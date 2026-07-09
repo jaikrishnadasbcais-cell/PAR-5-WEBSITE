@@ -162,10 +162,12 @@ export function HeroBackgroundGrid({
   rotateY: MotionValue<number>;
 }) {
   const reduced = useReducedMotion() ?? false;
-  // v3.3 follow-up: fade completes by 0.7 of the hero scroll (was 0.85) —
-  // ~20% steeper opacity delta per scroll increment, still fully scrubbed
-  // and reversible.
-  const gridOpacity = useTransform(scrollProgress, [0, 0.7], [1, 0]);
+  // Fade range restored to C1's original 0.85 after the on-device mobile
+  // review: the 0.7 range from the +20%-intensity tweak dimmed the grid
+  // noticeably at small scroll offsets and read as washed/blurry against the
+  // far layer's blur. The +20% intensity now lives in scrubDistance alone;
+  // per-layer blur/opacity and the scrim are untouched C1 values.
+  const gridOpacity = useTransform(scrollProgress, [0, 0.85], [1, 0]);
 
   return (
     <motion.div

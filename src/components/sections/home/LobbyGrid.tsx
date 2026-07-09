@@ -121,6 +121,9 @@ function JellyPress({
 // with its card's molten angle. Light cards get none — sheen on white reads
 // as smudge (mockup review). Reduced-motion: no sheen at all; the card simply
 // appears via the existing crossfade.
+// The band crops inside its own overflow-hidden layer (not the card's) so the
+// card itself never clips in-flow content — see the mobile-regression fix on
+// the ghost numeral below.
 function MoltenSheen({ angle, delay }: { angle: number; delay: number }) {
   const reduced = useReducedMotion() ?? false;
   const variants: Variants = {
@@ -132,14 +135,18 @@ function MoltenSheen({ angle, delay }: { angle: number; delay: number }) {
   };
   if (reduced) return null;
   return (
-    <motion.span
+    <span
       aria-hidden="true"
-      variants={variants}
-      className="pointer-events-none absolute inset-0 z-10"
-      style={{
-        backgroundImage: `linear-gradient(${angle}deg, transparent 42%, color-mix(in srgb, var(--color-moss-100) 13%, transparent) 50%, transparent 58%)`,
-      }}
-    />
+      className="pointer-events-none absolute inset-0 z-10 overflow-hidden rounded-2xl"
+    >
+      <motion.span
+        variants={variants}
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `linear-gradient(${angle}deg, transparent 42%, color-mix(in srgb, var(--color-moss-100) 13%, transparent) 50%, transparent 58%)`,
+        }}
+      />
+    </span>
   );
 }
 
@@ -164,8 +171,10 @@ function ArrowIcon({ className }: { className?: string }) {
 // name, non-italic against the italic headline so they read as a quiet rule
 // rather than part of the name. Plain inline text (not flex) so the whole
 // phrase wraps naturally at narrow widths instead of overflowing the block.
-// A non-breaking space glues the trailing dash to the last word so it never
-// wraps onto an orphan line by itself.
+// Non-breaking spaces glue each dash to its adjacent word so neither dash
+// ever strands alone on its own line (the mobile-regression report caught
+// this: the old code used plain spaces despite this comment claiming
+// otherwise).
 function FlankedHeadline({
   className,
   children,
@@ -181,29 +190,37 @@ function FlankedHeadline({
       )}
     >
       <span aria-hidden="true" className="not-italic">
-        {'— '}
+        {'— '}
       </span>
       {children}
       <span aria-hidden="true" className="not-italic">
-        {' —'}
+        {' —'}
       </span>
     </h2>
   );
 }
 
-// The lobby (v3.3): one composed object — a genuine 2×3 grid at every
-// breakpoint (v3.1 D1). Row 1 is the two gifts, dual-gold black/white colors
-// kept verbatim from v3.1 D4, order swapped per E1 (the zero-risk demo leads,
-// DSS supports — consistent with the C5.3 conversion strategy). Beneath them,
-// the four lobby cards form a diagonal checkerboard of deep molten-green and
-// light cards with magazine-style interiors (E2–E4). Bright green is signal
-// (arrows, CTAs); the moss surfaces are material.
+// The lobby (v3.3): one composed object. Row 1 is the two gifts, dual-gold
+// black/white colors kept verbatim from v3.1 D4, order swapped per E1 (the
+// zero-risk demo leads, DSS supports — consistent with the C5.3 conversion
+// strategy). Beneath them, the four lobby cards form a diagonal checkerboard
+// of deep molten-green and light cards with magazine-style interiors (E2–E4).
+// Bright green is signal (arrows, CTAs); the moss surfaces are material.
+//
+// MOBILE DEVIATION from v3.1 D1's "2×3 at every breakpoint" (on-device
+// regression fix, needs owner ratification): below sm the OFFER row stacks
+// full-width while the checkerboard stays 2×2. Forced by geometry, not
+// taste — a 2-up offer card at 320px leaves 97px of content width and the
+// "See What's Included" label alone measures 119px even at 12px Inter, so
+// no font size yields the required single-line pill CTA (see the pill
+// comments below). The checkerboard's own content fits 2-up and is
+// unchanged.
 export function LobbyGrid() {
   return (
     <Section background="bg" className="pt-8 md:pt-12 lg:pt-16">
       <Container>
         <StaggerGroup className="grid grid-cols-2 gap-2.5 md:gap-4">
-          <StaggerItem className="min-w-0">
+          <StaggerItem className="col-span-2 min-w-0 sm:col-span-1">
             <JellyPress className="h-full">
               <div
                 className={cn(
@@ -222,13 +239,15 @@ export function LobbyGrid() {
                 {/* Owner-approved v3.1 follow-up: on the light surface the CTA
                     is the site's outline-button pattern — dark label, green
                     border + arrow — since green letterforms fail contrast on
-                    white. */}
+                    white. Single-line pill (mobile-regression fix): the base
+                    button's whitespace-nowrap + h-10 stand; the full-width
+                    offer row guarantees the label fits at 320px. */}
                 <div className="mt-auto pt-4">
                   <LinkButton
                     href={`${ROUTES.tapIn}?interest=demo-website`}
                     variant="secondary"
                     size="sm"
-                    className="h-auto min-h-10 w-fit gap-1.5 whitespace-normal px-3.5 py-2 text-center md:px-5"
+                    className="w-fit gap-1.5 px-4 md:px-5"
                   >
                     Claim Your Demo
                     <ArrowIcon className="h-4 w-4 shrink-0 text-accent" />
@@ -238,7 +257,7 @@ export function LobbyGrid() {
             </JellyPress>
           </StaggerItem>
 
-          <StaggerItem className="min-w-0">
+          <StaggerItem className="col-span-2 min-w-0 sm:col-span-1">
             <JellyPress className="h-full">
               {/* The offer blocks keep their hover-triggered gold sheen,
                   unchanged — resting-state sheen is exclusive to the two dark
@@ -259,13 +278,15 @@ export function LobbyGrid() {
                       (shape, padding, weight), recolored for the DSS surface:
                       gold border + arrow, light label. hover:bg-surface would
                       flash white under the light label, so it becomes a quiet
-                      gold tint here. */}
+                      gold tint here. Single-line pill — same nowrap contract
+                      as the demo pill; this label is the widest (119px at
+                      12px Inter), the reason the offer row stacks below sm. */}
                   <div className="mt-auto pt-4">
                     <LinkButton
                       href={ROUTES.whatsIncluded}
                       variant="secondary"
                       size="sm"
-                      className="h-auto min-h-10 w-fit gap-1.5 whitespace-normal border-gold text-inverse-text px-3.5 py-2 text-center hover:bg-gold/10 md:px-5"
+                      className="w-fit gap-1.5 border-gold text-inverse-text px-4 hover:bg-gold/10 md:px-5"
                     >
                       See What's Included
                       <ArrowIcon className="h-4 w-4 shrink-0 text-gold" />
@@ -282,12 +303,14 @@ export function LobbyGrid() {
               <StaggerItem key={href} className="min-w-0">
                 <JellyPress className="h-full">
                   <Link href={href} className="block h-full">
-                    {/* isolate + overflow-hidden: the ghost numeral sits at
-                        -z-10 so it paints above the card's surface but below
-                        the in-flow content, and crops at the card edge. */}
+                    {/* No overflow-hidden on the Card itself (mobile-
+                        regression fix: it was clipping the headings). The
+                        ghost numeral and sheen each crop inside their own
+                        absolutely-positioned overflow-hidden layer instead,
+                        so in-flow content can never be cut by the crop. */}
                     <Card
                       className={cn(
-                        'relative isolate flex h-full flex-col overflow-hidden p-4 md:p-6',
+                        'relative isolate flex h-full flex-col p-4 md:p-6',
                         FLOAT_SHADOW,
                         molten && cn('border-transparent', molten.surface)
                       )}
@@ -313,9 +336,14 @@ export function LobbyGrid() {
                           molten ? 'text-moss-100' : 'text-text-primary'
                         )}
                       />
+                      {/* E4's "one size up" heading holds from md up; at the
+                          2-up mobile width it clipped ("Solutions" needs
+                          122px at h2's 28px floor vs 97px of card content at
+                          320px), so mobile steps back to h3 — headings must
+                          never clip. */}
                       <h3
                         className={cn(
-                          'mt-3 font-[family-name:var(--font-fraunces)] text-h2',
+                          'mt-3 font-[family-name:var(--font-fraunces)] text-h3 md:text-h2',
                           molten ? 'text-white' : 'text-text-primary'
                         )}
                       >
@@ -341,15 +369,21 @@ export function LobbyGrid() {
                         />
                       </div>
                       {/* Ghost numeral (E4.6) — echoes the Process page's
-                          numbered step markers; decorative only. */}
+                          numbered step markers; decorative only. Cropped by
+                          its own overflow-hidden layer (not the Card's) so
+                          the crop can never clip the card's real content. */}
                       <span
                         aria-hidden="true"
-                        className={cn(
-                          'pointer-events-none absolute -bottom-[0.22em] -right-[0.04em] -z-10 select-none font-[family-name:var(--font-fraunces)] text-[6rem] font-semibold leading-none md:text-[9rem]',
-                          molten ? 'text-moss-100/15' : 'text-text-primary/5'
-                        )}
+                        className="pointer-events-none absolute inset-0 -z-10 select-none overflow-hidden rounded-2xl"
                       >
-                        {index}
+                        <span
+                          className={cn(
+                            'absolute -bottom-[0.22em] -right-[0.04em] font-[family-name:var(--font-fraunces)] text-[6rem] font-semibold leading-none md:text-[9rem]',
+                            molten ? 'text-moss-100/15' : 'text-text-primary/5'
+                          )}
+                        >
+                          {index}
+                        </span>
                       </span>
                     </Card>
                   </Link>
