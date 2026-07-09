@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useSyncExternalStore } from 'react';
 import { LinkButton } from '@/components/ui/LinkButton';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/layout/Section';
@@ -8,10 +9,25 @@ import { ROUTES } from '@/lib/routes';
 import { useBuildMySystem } from './useBuildMySystem';
 import { SelectionListItem } from './SelectionListItem';
 import { formatRand } from '@/lib/currency';
-import { whatsappLink } from '@/lib/whatsapp';
+import { buildSystemWhatsappLink } from '@/lib/whatsapp';
+
+// Hydration-safe read of the deployed origin for the WhatsApp message's
+// fallback reference link — no hardcoded domain to go stale, no
+// setState-in-effect. Server snapshot is '' (the link simply omits the
+// reference line in the SSR-rendered href); the client snapshot fills it in
+// right after hydration.
+const noopSubscribe = () => () => {};
+function useSiteOrigin(): string {
+  return useSyncExternalStore(
+    noopSubscribe,
+    () => window.location.origin,
+    () => ''
+  );
+}
 
 export function BuildMySystemReview() {
   const { selectedServices, totals } = useBuildMySystem();
+  const origin = useSiteOrigin();
   const hasItems = selectedServices.length > 0;
 
   if (!hasItems) {
@@ -89,8 +105,11 @@ export function BuildMySystemReview() {
           <LinkButton href={`${ROUTES.tapIn}?interest=build`} size="md">
             Book Complimentary Consultation
           </LinkButton>
+          {/* The pre-fill carries the actual cart — service names, from-
+              prices, totals — so the conversation starts with the system the
+              person just built, not a generic line (on-device review fix). */}
           <LinkButton
-            href={whatsappLink('build-my-system')}
+            href={buildSystemWhatsappLink(selectedServices, totals, origin || undefined)}
             target="_blank"
             rel="noopener noreferrer"
             variant="secondary"

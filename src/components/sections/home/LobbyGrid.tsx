@@ -288,7 +288,7 @@ export function LobbyGrid() {
                       size="sm"
                       className="w-fit gap-1.5 border-gold text-inverse-text px-4 hover:bg-gold/10 md:px-5"
                     >
-                      See What's Included
+                      See What&apos;s Included
                       <ArrowIcon className="h-4 w-4 shrink-0 text-gold" />
                     </LinkButton>
                   </div>
