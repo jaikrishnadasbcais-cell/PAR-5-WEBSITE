@@ -21,6 +21,7 @@ export const tapInSchema = z.object({
   formType: z.enum(FORM_TYPES),
   sourcePage: z.string().max(200).catch('/tap-in'),
   buildSelections: z.string().max(2000).optional(),
+  demoAnswers: z.string().max(500).optional(),
 });
 
 export type TapInInput = z.infer<typeof tapInSchema>;

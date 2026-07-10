@@ -62,9 +62,13 @@ function Field({
 export function TapInForm({
   formType,
   serviceInterest,
+  demoAnswers,
 }: {
   formType: FormType;
   serviceInterest?: ServiceInterest;
+  // Serialized demo-qualifier answers (v3.4 G3), resolved server-side on the
+  // tap-in page from the qualifier's query params and attached to the lead.
+  demoAnswers?: string;
 }) {
   const [state, formAction, pending] = useActionState(submitTapIn, TAP_IN_INITIAL_STATE);
 
@@ -132,6 +136,7 @@ export function TapInForm({
       <input type="hidden" name="formType" value={formType} />
       <input type="hidden" name="sourcePage" value={sourcePage} />
       {buildSelections && <input type="hidden" name="buildSelections" value={buildSelections} />}
+      {demoAnswers && <input type="hidden" name="demoAnswers" value={demoAnswers} />}
 
       {/* Honeypot — visually and programmatically removed; bots fill it anyway. */}
       <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">

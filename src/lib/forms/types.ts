@@ -26,6 +26,9 @@ export type TapInPayload = {
   message?: string;
   sourcePage: string;
   buildSelections?: string;
+  // Serialized demo-qualifier answers (v3.4 G3) when the lead came through
+  // the demo flow — the demo counterpart to buildSelections.
+  demoAnswers?: string;
 };
 
 // Discriminated union returned by the GAS adapter — never throws to the UI.

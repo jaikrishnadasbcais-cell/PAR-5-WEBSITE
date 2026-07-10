@@ -6,6 +6,7 @@ import { LinkButton } from '@/components/ui/LinkButton';
 import { TapInForm } from '@/components/forms/TapInForm';
 import { SERVICE_INTERESTS, type FormType, type ServiceInterest } from '@/lib/forms/types';
 import { whatsappLink, type WhatsAppContext } from '@/lib/whatsapp';
+import { resolveDemoAnswers } from '@/components/features/demo-qualifier';
 
 export const metadata: Metadata = {
   title: 'Tap In — PAR5',
@@ -44,6 +45,11 @@ export default async function TapInPage({
   const { serviceInterest, formType, whatsappContext } = resolveInterest(interest);
   const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_EMBED_URL;
 
+  // Demo qualifier hand-off (v3.4 G3): when the visitor came through the demo
+  // flow, their taps are in the query string — reflect them back and attach
+  // them to the lead so only Name/Email remain.
+  const demo = resolveDemoAnswers(params);
+
   return (
     <Section background="bg" className="relative overflow-hidden">
       <AmbientBlobs />
@@ -52,8 +58,9 @@ export default async function TapInPage({
           Tap In
         </h1>
         <p className="mt-3 max-w-xl text-body-lg text-text-secondary">
-          Book a free discovery call, claim your demo, or just say hi — no pressure, no
-          obligation.
+          {demo
+            ? demo.reflection
+            : 'Book a free discovery call, claim your demo, or just say hi — no pressure, no obligation.'}
         </p>
 
         {/* Path 1 — WhatsApp: likely the highest-converting path in the SA
@@ -74,10 +81,19 @@ export default async function TapInPage({
         {/* Path 2 — the form */}
         <div className="mt-12">
           <h2 className="font-[family-name:var(--font-fraunces)] text-h3 font-semibold text-text-primary">
-            Or send it through here
+            {demo ? 'Just your name and email' : 'Or send it through here'}
           </h2>
+          {demo && (
+            <p className="mt-2 text-caption text-text-secondary">
+              We&apos;ve got the rest from your answers — {demo.readable}.
+            </p>
+          )}
           <div className="mt-6">
-            <TapInForm formType={formType} serviceInterest={serviceInterest} />
+            <TapInForm
+              formType={formType}
+              serviceInterest={serviceInterest}
+              demoAnswers={demo?.readable}
+            />
           </div>
         </div>
 
