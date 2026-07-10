@@ -95,7 +95,7 @@ export function Hero() {
               We exist to help you scale.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <LinkButton href={`${ROUTES.tapIn}?interest=demo-website`} size="md">
+              <LinkButton href={ROUTES.giftDemoWebsite} size="md">
                 Get Your Free Demo Website
               </LinkButton>
               <LinkButton href={ROUTES.tapIn} variant="secondary" size="md" className="group">

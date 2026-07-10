@@ -9,9 +9,11 @@ export const ROUTES = {
   insights: '/insights',
   buildMySystem: '/build-my-system',
   tapIn: '/tap-in',
-  // Placeholder — page not built yet. Referenced by the homepage "Welcome Gift"
-  // section's CTA; will 404 until that page exists.
-  whatsIncluded: '/whats-included',
+  // Gift landing pages (v3.4 G1) — the offer blocks' click-through. The Demo
+  // page ends in the tap-only qualifier (G3); DSS is a straight content →
+  // consultation page. These replaced the old dead `whatsIncluded` placeholder.
+  giftDigitalSalesSystem: '/digital-sales-system',
+  giftDemoWebsite: '/demo-website',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

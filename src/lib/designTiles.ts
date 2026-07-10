@@ -28,3 +28,13 @@ export const DESIGN_TILES: DesignTile[] = [
   { slug: 'retail', label: 'Retail', src: '/images/pages/design-tiles/retail.png' },
   { slug: 'tourism', label: 'Tourism', src: '/images/pages/design-tiles/tourism.png' },
 ];
+
+// Curated subset lookup for the v3.4 gift pages' "a taste of what we build"
+// row — preserves the given slug order and silently drops any unknown slug
+// (a typo shows fewer tiles rather than crashing the page). Curation only;
+// no dynamic/industry filtering, per v3.4 G2.3.
+export function getDesignTiles(slugs: readonly string[]): DesignTile[] {
+  return slugs
+    .map((slug) => DESIGN_TILES.find((tile) => tile.slug === slug))
+    .filter((tile): tile is DesignTile => tile !== undefined);
+}

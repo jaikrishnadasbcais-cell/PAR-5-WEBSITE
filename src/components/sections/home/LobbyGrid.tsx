@@ -6,6 +6,7 @@ import { ROUTES } from '@/lib/routes';
 import { Card } from '@/components/ui/Card';
 import { Container } from '@/components/ui/Container';
 import { LinkButton } from '@/components/ui/LinkButton';
+import { FlankedHeadline } from '@/components/ui/FlankedHeadline';
 import { Section } from '@/components/layout/Section';
 import { StaggerGroup, StaggerItem } from '@/components/motion/Stagger';
 import {
@@ -167,39 +168,6 @@ function ArrowIcon({ className }: { className?: string }) {
   );
 }
 
-// Editorial-masthead flourish: thin flanking dashes either side of the offer
-// name, non-italic against the italic headline so they read as a quiet rule
-// rather than part of the name. Plain inline text (not flex) so the whole
-// phrase wraps naturally at narrow widths instead of overflowing the block.
-// Non-breaking spaces glue each dash to its adjacent word so neither dash
-// ever strands alone on its own line (the mobile-regression report caught
-// this: the old code used plain spaces despite this comment claiming
-// otherwise).
-function FlankedHeadline({
-  className,
-  children,
-}: {
-  className?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <h2
-      className={cn(
-        'font-[family-name:var(--font-fraunces)] text-h3 font-semibold italic md:text-h2',
-        className
-      )}
-    >
-      <span aria-hidden="true" className="not-italic">
-        {'— '}
-      </span>
-      {children}
-      <span aria-hidden="true" className="not-italic">
-        {' —'}
-      </span>
-    </h2>
-  );
-}
-
 // The lobby (v3.3): one composed object. Row 1 is the two gifts, dual-gold
 // black/white colors kept verbatim from v3.1 D4, order swapped per E1 (the
 // zero-risk demo leads, DSS supports — consistent with the C5.3 conversion
@@ -244,7 +212,7 @@ export function LobbyGrid() {
                     offer row guarantees the label fits at 320px. */}
                 <div className="mt-auto pt-4">
                   <LinkButton
-                    href={`${ROUTES.tapIn}?interest=demo-website`}
+                    href={ROUTES.giftDemoWebsite}
                     variant="secondary"
                     size="sm"
                     className="w-fit gap-1.5 px-4 md:px-5"
@@ -283,7 +251,7 @@ export function LobbyGrid() {
                       12px Inter), the reason the offer row stacks below sm. */}
                   <div className="mt-auto pt-4">
                     <LinkButton
-                      href={ROUTES.whatsIncluded}
+                      href={ROUTES.giftDigitalSalesSystem}
                       variant="secondary"
                       size="sm"
                       className="w-fit gap-1.5 border-gold text-inverse-text px-4 hover:bg-gold/10 md:px-5"
