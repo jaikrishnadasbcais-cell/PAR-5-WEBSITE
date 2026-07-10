@@ -21,8 +21,12 @@ export type RoutePath = (typeof ROUTES)[RouteKey];
 
 export const PRIMARY_CTA = ROUTES.tapIn;
 
-// Desktop top navigation — Tap In stays a button, not a nav link
+// Desktop top navigation — Tap In stays a button, not a nav link.
+// Home is explicit (v3.5 H3): the logo alone isn't a safe assumption for every
+// visitor. Mobile already has a Home tab. NOTE: consumers must match '/'
+// exactly, not by prefix, or Home reads as active on every page.
 export const NAV_ROUTES = [
+  { label: 'Home', href: ROUTES.home },
   { label: 'Solutions', href: ROUTES.solutions },
   { label: 'Process', href: ROUTES.process },
   { label: 'Showcase', href: ROUTES.showcase },
@@ -34,6 +38,6 @@ export const TAB_ROUTES = [
   { label: 'Home', href: ROUTES.home, icon: 'home' },
   { label: 'Solutions', href: ROUTES.solutions, icon: 'grid' },
   { label: 'Insights', href: ROUTES.insights, icon: 'book' },
-  { label: 'Build', href: ROUTES.buildMySystem, icon: 'package' },
+  { label: 'Build', href: ROUTES.buildMySystem, icon: 'cart' },
   { label: 'Tap In', href: ROUTES.tapIn, icon: 'target' },
 ] as const;

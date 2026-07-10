@@ -38,12 +38,14 @@ export function BookIcon({ className }: IconProps) {
   );
 }
 
-export function PackageIcon({ className }: IconProps) {
+// Editorial thin-stroke shopping bag (v3.5 H1) — the cart affordance shared by
+// the desktop header and the mobile "Build" tab, which it replaces the cube
+// (PackageIcon) with. Deliberately a bag outline, not a skeuomorphic trolley.
+export function CartIcon({ className }: IconProps) {
   return (
     <svg {...SHARED_PROPS} className={className} aria-hidden="true">
-      <path d="M12 3 4 7v10l8 4 8-4V7l-8-4Z" />
-      <path d="M4 7l8 4 8-4" />
-      <path d="M12 11v10" />
+      <path d="M6 8h12l-1.2 11.2a1.5 1.5 0 0 1-1.5 1.3H8.7a1.5 1.5 0 0 1-1.5-1.3L6 8Z" />
+      <path d="M9 8.5V6.5a3 3 0 0 1 6 0v2" />
     </svg>
   );
 }
