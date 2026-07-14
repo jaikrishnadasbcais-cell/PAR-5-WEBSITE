@@ -59,3 +59,12 @@ export function TargetIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function PersonIcon({ className }: IconProps) {
+  return (
+    <svg {...SHARED_PROPS} className={className} aria-hidden="true">
+      <circle cx="12" cy="8" r="3.5" />
+      <path d="M4.5 20c1.2-3.8 4-5.5 7.5-5.5s6.3 1.7 7.5 5.5" />
+    </svg>
+  );
+}

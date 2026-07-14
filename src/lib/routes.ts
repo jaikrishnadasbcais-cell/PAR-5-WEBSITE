@@ -21,6 +21,10 @@ export type RoutePath = (typeof ROUTES)[RouteKey];
 
 export const PRIMARY_CTA = ROUTES.tapIn;
 
+// External client portal / CRM — clients sign in here, it's not part of the
+// marketing site's own routing.
+export const CLIENT_PORTAL_URL = 'https://real-os.onrender.com/';
+
 // Desktop top navigation — Tap In stays a button, not a nav link.
 // Home is explicit (v3.5 H3): the logo alone isn't a safe assumption for every
 // visitor. Mobile already has a Home tab. NOTE: consumers must match '/'

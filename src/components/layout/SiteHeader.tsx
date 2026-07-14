@@ -3,13 +3,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { NAV_ROUTES, ROUTES } from '@/lib/routes';
+import { CLIENT_PORTAL_URL, NAV_ROUTES, ROUTES } from '@/lib/routes';
 import { cn } from '@/lib/cn';
 import { Container } from '@/components/ui/Container';
 import { LinkButton } from '@/components/ui/LinkButton';
 import { TapInLabel } from '@/components/ui/TapInLabel';
 import { useBuildMySystem } from '@/components/features/build-my-system';
-import { CartIcon } from './TabBarIcons';
+import { CartIcon, PersonIcon } from './TabBarIcons';
 import { CartBadge } from './CartBadge';
 
 // Solid dark bar on every page (not conditional on scroll) — the white/green
@@ -60,28 +60,43 @@ export function SiteHeader() {
             })}
           </nav>
 
-          {/* Cart affordance (v3.5 H1) — always routes straight to
-              /build-my-system; no dropdown mini-cart. Mobile gets the same
-              icon + badge on its "Build" tab instead. */}
-          <div className="hidden items-center gap-2 md:flex">
-            <Link
-              href={ROUTES.buildMySystem}
-              aria-current={cartActive ? 'page' : undefined}
-              className={cn(
-                'relative rounded-full p-2 transition-colors hover:text-inverse-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
-                cartActive ? 'text-inverse-text' : 'text-inverse-text/70'
-              )}
+          <div className="flex items-center gap-2">
+            {/* Client portal / CRM login — external, opens in a new tab. Shown
+                on mobile too since the header is the only persistent chrome
+                there (the bottom tab bar is site nav, not account access). */}
+            <a
+              href={CLIENT_PORTAL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Client login"
+              className="rounded-full p-2 text-inverse-text/70 transition-colors hover:text-inverse-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
-              <span className="sr-only">Build My System</span>
-              <span className="relative inline-flex">
-                <CartIcon className="h-6 w-6" />
-                <CartBadge count={selectedServices.length} className="-right-2 -top-1.5" />
-              </span>
-            </Link>
+              <PersonIcon className="h-6 w-6" />
+            </a>
 
-            <LinkButton href={ROUTES.tapIn} size="sm" className="group inline-flex">
-              <TapInLabel />
-            </LinkButton>
+            {/* Cart affordance (v3.5 H1) — always routes straight to
+                /build-my-system; no dropdown mini-cart. Mobile gets the same
+                icon + badge on its "Build" tab instead. */}
+            <div className="hidden items-center gap-2 md:flex">
+              <Link
+                href={ROUTES.buildMySystem}
+                aria-current={cartActive ? 'page' : undefined}
+                className={cn(
+                  'relative rounded-full p-2 transition-colors hover:text-inverse-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+                  cartActive ? 'text-inverse-text' : 'text-inverse-text/70'
+                )}
+              >
+                <span className="sr-only">Build My System</span>
+                <span className="relative inline-flex">
+                  <CartIcon className="h-6 w-6" />
+                  <CartBadge count={selectedServices.length} className="-right-2 -top-1.5" />
+                </span>
+              </Link>
+
+              <LinkButton href={ROUTES.tapIn} size="sm" className="group inline-flex">
+                <TapInLabel />
+              </LinkButton>
+            </div>
           </div>
         </div>
       </Container>
